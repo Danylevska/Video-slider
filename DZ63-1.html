@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video {
+            width: 100%;
+            height: 100vh;
+        }
+
+        h1 {
+            position: absolute;
+            font-size: 140px;
+            z-index: 5;
+        }
+
+        p {
+            position: absolute;
+            font-size: 30px;
+            z-index: 5;
+            top: 500px;
+            width: 600px;
+        }
+
+        .btn-section {
+            width: 90%;
+            position: absolute;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-section .btn {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            outline: none;
+            border: none;
+            opacity: 0.5;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <h1></h1>
+    <p></p>
+    <video id="video" autoplay></video>
+    <section class="btn-section">
+        <button class="btn" id="prev">
+            <i class="large material-icons">skip_previous</i>
+        </button>
+        <button class="btn" id="next">
+            <i class="large material-icons">skip_next</i>
+        </button>
+    </section>
+    <script src="./jquery.js"></script>
+    <script>
+      window.addEventListener("load", () => {
+  //   $("#video").css({ opacity: 0 });
+  $("#video, h1, p").fadeOut(1).fadeIn(1000);
+
+  $("#prev, #next").on("click", () => {
+    $("#video, #prev, #next").toggle(1500).show(1500);
+
+    $("h1, p").animate(
+      {
+        top: "-=100",
+      },
+      1,
+      () => {
+        $("h1, p").animate({top: "+=50", opacity: "-=1" }, 1200, () => {
+            $("h1, p").animate({opacity: "+=1" });
+        });
+      }
+    );
+  });
+});
+    </script>
+    <script>
+
+        window.addEventListener("load", () => {
+            const videos = [
+    {title: "Їжачок", src: "./video/VID_20190714_150115.3gp", quote: "В саду зустрів я їжака, він коло стежки їв жука, і так піджак свій наїжачив мабуть, мене уперше бачив." },
+    { title: "Поле", src: "./video/VID_20220610_101611.3gp", quote: "І знов весна, знов жайворонки в полі, – а з кожною весною ближче нам до того, що ми звемо майбуттям, – до свята серця, розуму і волі."},
+    { title: "Бузок", src: "./video/VID_20210522_141903.3gp", quote: "Бузковий кущ  немов букет великий. Яка краса у гронах на гілках! Цвіте бузок звичайний і привитий, а я шукаю щастя в пелюстках."},
+            ];
+
+            let currentVideoIndex = 0;
+
+            const videoElement = document.querySelector("#video");
+            const h1 = document.querySelector("h1");
+            const p = document.querySelector("p");
+
+            const prev = document.querySelector("#prev");
+            const next = document.querySelector("#next");
+
+            setVideo(currentVideoIndex);
+
+            document.body.addEventListener("click", () => {
+                videoElement.play();
+            });
+
+            function setVideo(index, delay = 0) {
+                const action = () => {
+                    const { src, title, quote } = videos[index];
+                    videoElement.src = src;
+                    h1.textContent = title;
+                    p.textContent = quote;
+
+                    videoElement.play();
+                };
+                delay ? setTimeout(() => action(), delay) : action();
+            }
+
+            prev.onclick = () => {
+                currentVideoIndex--;
+
+                if (videos[currentVideoIndex]) {
+                    setVideo(currentVideoIndex, 1000);
+                } else {
+                    currentVideoIndex = videos.length - 1;
+                    setVideo(currentVideoIndex, 1000);
+                }
+            };
+
+            next.onclick = () => {
+                currentVideoIndex++;
+
+                if (videos[currentVideoIndex]) {
+                    setVideo(currentVideoIndex, 1000);
+                } else {
+                    currentVideoIndex = 0;
+                    setVideo(currentVideoIndex, 1000);
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>
